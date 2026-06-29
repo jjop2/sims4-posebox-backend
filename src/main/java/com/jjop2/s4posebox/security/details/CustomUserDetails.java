@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.jjop2.s4posebox.user.domain.Role;
 import com.jjop2.s4posebox.user.domain.User;
 
 import lombok.Getter;
@@ -33,12 +34,15 @@ public class CustomUserDetails implements UserDetails {
 	public @Nullable String getPassword() {
 		return user.getPassword();
 	}
-
+	
 	@Override
 	public String getUsername() {
 		return user.getLoginId();
 	}
-
+	
+	public Role getRole() {
+		return user.getRole();
+	}
 
 	@Override
 	public boolean isAccountNonExpired() {

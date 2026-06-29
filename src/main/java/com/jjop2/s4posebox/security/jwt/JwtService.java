@@ -1,4 +1,4 @@
-package com.jjop2.s4posebox.jwt;
+package com.jjop2.s4posebox.security.jwt;
 
 import java.util.Date;
 
@@ -43,7 +43,7 @@ public class JwtService {
 	}
 	
 	
-	// TODO: 시큐리티 적용할 때 리팩토링
+	// TODO: Security Filter에서 토큰 검증에 사용
 	private Claims getClaims(String token) {
 		
 		return Jwts.parser()

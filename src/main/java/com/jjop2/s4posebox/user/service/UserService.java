@@ -75,7 +75,7 @@ public class UserService {
 	 * 
 	 * - TODO: 로그인 실패 응답을 프로젝트 공통 형식으로 변경
 	 */
-	public LoginResponse login(LoginRequest request) {	
+	public LoginResponse login(LoginRequest request) {
 		
 		Authentication authentication =
 			authenticationManager.authenticate(

@@ -19,7 +19,8 @@ public class JwtService {
 	private static final long EXPIRATION_TIME = 24 * 60 * 60 * 1000L;
 	
 	// 토큰 타입
-	private static final String PREFIX = "Bearer ";
+	// TODO: 필요한 경우 JWT 관련 상수만 모아둔 클래스를 만들기
+	public static final String PREFIX = "Bearer ";
 	
 	// 임시 서명 키
 	// TODO: 서명 키 환경변수로 빼두기
@@ -43,7 +44,6 @@ public class JwtService {
 	}
 	
 	
-	// TODO: Security Filter에서 토큰 검증에 사용
 	private Claims getClaims(String token) {
 		
 		return Jwts.parser()
@@ -52,9 +52,6 @@ public class JwtService {
 				.parseSignedClaims(token)
 				.getPayload();
 	}
-	
-	public String getLoginId(String token) { return getClaims(token).getSubject(); }
-	public String getRole(String token) { return getClaims(token).get(ROLE_CLAIM, String.class); }
 	
 	public boolean validateToken(String token) {
 
@@ -65,6 +62,15 @@ public class JwtService {
 	        return false;
 	    }
 
+	}
+	
+	// TODO: getClaims를 한번만 실행하도록 리팩토링 후보
+	public String getLoginId(String token) {
+		return getClaims(token).getSubject();
+	}
+	
+	public String getRole(String token) {
+		return getClaims(token).get(ROLE_CLAIM, String.class);
 	}
 	
 }

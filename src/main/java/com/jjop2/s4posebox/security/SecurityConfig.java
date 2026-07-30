@@ -8,10 +8,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.jjop2.s4posebox.security.filter.JwtAuthenticationFilter;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+	
+	private final JwtAuthenticationFilter authenticationFilter;
 
 	@Bean
 	BCryptPasswordEncoder passwordEncoder() {
@@ -24,11 +32,20 @@ public class SecurityConfig {
 		http.csrf(csrf -> csrf.disable());
 		
 		http.authorizeHttpRequests((authorize) ->
-			authorize.requestMatchers("/", "/user/**")
+			authorize.requestMatchers(
+					"/",
+					"/user/signup",
+					"/user/login"
+				)
 				.permitAll()
 				.anyRequest()
 				.authenticated()	
 				
+		);
+		
+		http.addFilterBefore(
+			authenticationFilter,
+			UsernamePasswordAuthenticationFilter.class
 		);
 		
 		return http.build();

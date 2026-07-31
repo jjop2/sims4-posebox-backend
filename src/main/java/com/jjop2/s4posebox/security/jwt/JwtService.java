@@ -19,15 +19,14 @@ public class JwtService {
 	private static final long EXPIRATION_TIME = 24 * 60 * 60 * 1000L;
 	
 	// 토큰 타입
-	// TODO: 필요한 경우 JWT 관련 상수만 모아둔 클래스를 만들기
-	public static final String PREFIX = "Bearer ";
+	public static final String PREFIX = JwtConstants.TOKEN_PREFIX;
 	
 	// 임시 서명 키
 	// TODO: 서명 키 환경변수로 빼두기
 	private static final SecretKey KEY = Jwts.SIG.HS256.key().build();
 	
 	// 권한 관련 클레임 키
-	private static final String ROLE_CLAIM = "role";
+	private static final String ROLE_CLAIM = JwtConstants.ROLE_CLAIM;
 	
 	
 	public String createToken(String loginId, Role role) {
@@ -64,7 +63,7 @@ public class JwtService {
 
 	}
 	
-	// TODO: getClaims를 한번만 실행하도록 리팩토링 후보
+	// TODO: getClaims를 한번만 실행하도록 리팩토링 후보(성능 최적화 목적)
 	public String getLoginId(String token) {
 		return getClaims(token).getSubject();
 	}

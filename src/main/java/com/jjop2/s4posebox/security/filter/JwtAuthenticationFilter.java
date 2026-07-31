@@ -41,7 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 		
-		// TODO: PREFIX 상수 모음으로 옮길 때 수정
 		String token = authorization.substring(JwtService.PREFIX.length());
 		
 		if (!jwtService.validateToken(token)) {

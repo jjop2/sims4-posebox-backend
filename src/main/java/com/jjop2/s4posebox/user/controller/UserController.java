@@ -1,5 +1,7 @@
 package com.jjop2.s4posebox.user.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,13 +24,21 @@ public class UserController {
 	private final UserService userService;
 	
 	@PostMapping("/signup")
-	public User signup(@Valid @RequestBody SignupRequest request) {
-		return userService.signup(request);
+	public ResponseEntity<Void> signup(@Valid @RequestBody SignupRequest request) {
+		
+		userService.signup(request);
+		
+		return ResponseEntity
+				.status(HttpStatus.CREATED)
+				.build();
 	}
 	
 	@PostMapping("/login")
-	public LoginResponse login(@Valid @RequestBody LoginRequest request) {
-		return userService.login(request);
+	public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+		
+		LoginResponse response = userService.login(request);
+		
+		return ResponseEntity.ok(response);
 	}
 
 }

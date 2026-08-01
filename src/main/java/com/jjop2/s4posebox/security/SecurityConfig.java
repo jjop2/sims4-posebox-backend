@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	
 	private final JwtAuthenticationFilter authenticationFilter;
+	private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
 	@Bean
 	BCryptPasswordEncoder passwordEncoder() {
@@ -35,7 +36,10 @@ public class SecurityConfig {
 			authorize.requestMatchers(
 					"/",
 					"/user/signup",
-					"/user/login"
+					"/user/login",
+					
+					// TODO: /test 삭제
+					"/test/*"
 				)
 				.permitAll()
 				.anyRequest()
@@ -46,6 +50,10 @@ public class SecurityConfig {
 		http.addFilterBefore(
 			authenticationFilter,
 			UsernamePasswordAuthenticationFilter.class
+		);
+		
+		http.exceptionHandling(eh ->
+			eh.authenticationEntryPoint(authenticationEntryPoint)
 		);
 		
 		return http.build();

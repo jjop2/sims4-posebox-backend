@@ -1,6 +1,7 @@
 package com.jjop2.s4posebox.user.service;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,7 +38,7 @@ public class UserService {
 	 * - 이메일 중복 검사
 	 * - 회원 저장
 	 */
-	public User signup(SignupRequest request) {
+	public void signup(SignupRequest request) {
 		
 		if (userRepository.existsByLoginId(request.getLoginId())) {
 			throw new UserException(
@@ -62,8 +63,7 @@ public class UserService {
 			.role(Role.USER)
 			.build();
 		
-		return userRepository.save(user);
-		
+		userRepository.save(user);
 	}
 	
 	/*
@@ -72,18 +72,24 @@ public class UserService {
 	 * - 사용자 인증
 	 * - JWT Access Token 발급
 	 * - 로그인 응답 반환
-	 * 
-	 * - TODO: 로그인 실패 응답을 프로젝트 공통 형식으로 변경
 	 */
 	public LoginResponse login(LoginRequest request) {
 		
-		Authentication authentication =
-			authenticationManager.authenticate(
+		Authentication authentication;
+		
+		try {
+			authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(
 					request.getLoginId(),
 					request.getPassword()
 				)
 			);
+		} catch (BadCredentialsException e) {
+			throw new UserException(
+				ErrorCode.INVALID_CREDENTIALS,
+				"Invalid login ID or password."
+			);
+		}
 		
 		CustomUserDetails principal =
 			(CustomUserDetails) authentication.getPrincipal();

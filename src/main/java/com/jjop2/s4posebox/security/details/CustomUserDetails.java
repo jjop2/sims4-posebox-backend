@@ -8,21 +8,31 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.jjop2.s4posebox.user.domain.LocalAccount;
 import com.jjop2.s4posebox.user.domain.Role;
 import com.jjop2.s4posebox.user.domain.User;
 
 import lombok.Getter;
+import lombok.ToString;
 
-@Getter
+@ToString
 public class CustomUserDetails implements UserDetails {
 	
 	private User user;
-		
+	private String password;
+	
+	// 로그인 검증용 (LocalAccount 필요)
+	public CustomUserDetails(User user, String password) {
+		this.user = user;
+		this.password = password;
+	}
+
+	// JwtFilter용
 	public CustomUserDetails(User user) {
 		this.user = user;
+		this.password = null;
 	}
 	
-
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(
@@ -32,16 +42,20 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public @Nullable String getPassword() {
-		return user.getPassword();
+		return password;
 	}
 	
 	@Override
 	public String getUsername() {
-		return user.getLoginId();
+		return String.valueOf(user.getId());
 	}
 	
 	public Role getRole() {
 		return user.getRole();
+	}
+	
+	public Long getId() {
+		return user.getId();
 	}
 
 	@Override

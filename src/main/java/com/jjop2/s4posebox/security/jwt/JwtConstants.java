@@ -9,5 +9,7 @@ public final class JwtConstants {
 	
 	public static final String ROLE_CLAIM = "role";
 	
+	public static final String ACCOUNT_TYPE_CLAIM = "accountType";
+	
 	private JwtConstants() {}
 }

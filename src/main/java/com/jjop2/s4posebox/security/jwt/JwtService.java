@@ -6,6 +6,7 @@ import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Service;
 
+import com.jjop2.s4posebox.user.domain.AccountType;
 import com.jjop2.s4posebox.user.domain.Role;
 
 import io.jsonwebtoken.Claims;
@@ -28,17 +29,21 @@ public class JwtService {
 	// 권한 관련 클레임 키
 	private static final String ROLE_CLAIM = JwtConstants.ROLE_CLAIM;
 	
+	// 계정 타입 클레임 키
+	private static final String ACCOUNT_TYPE_CLAIM = JwtConstants.ACCOUNT_TYPE_CLAIM;
 	
-	public String createToken(String loginId, Role role) {
+	
+	public String createToken(Long userId, Role role, AccountType accountType) {
 		Date nowDate = new Date();
 		Date expDate = new Date( nowDate.getTime() + EXPIRATION_TIME );
 		
 		return Jwts.builder()
-				.subject(loginId)
+				.subject(String.valueOf(userId))
 				.issuedAt(nowDate)
 				.expiration(expDate)
 				.signWith(KEY)
 				.claim(ROLE_CLAIM, role.name())
+				.claim(ACCOUNT_TYPE_CLAIM, accountType.name())
 				.compact();
 	}
 	
@@ -63,13 +68,18 @@ public class JwtService {
 
 	}
 	
-	// TODO: getClaims를 한번만 실행하도록 리팩토링 후보(성능 최적화 목적)
-	public String getLoginId(String token) {
-		return getClaims(token).getSubject();
+	// TODO: getRole, getAccountType이 실제로 쓰이는 곳이 있는지 확인 후,
+	// 사용처 없으면 삭제 고려 (JwtFilter는 getId만 사용 중, 나머지는 CustomUserDetails에서 처리)
+	public Long getId(String token) {
+		return Long.valueOf(getClaims(token).getSubject());
 	}
 	
-	public String getRole(String token) {
-		return getClaims(token).get(ROLE_CLAIM, String.class);
+	public Role getRole(String token) {
+		return Role.valueOf(getClaims(token).get(ROLE_CLAIM, String.class));
+	}
+	
+	public AccountType getAccountType(String token) {
+		return AccountType.valueOf(getClaims(token).get(ACCOUNT_TYPE_CLAIM, String.class));
 	}
 	
 }

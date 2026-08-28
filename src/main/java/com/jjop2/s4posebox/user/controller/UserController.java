@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jjop2.s4posebox.user.domain.User;
 import com.jjop2.s4posebox.user.dto.LoginRequest;
 import com.jjop2.s4posebox.user.dto.LoginResponse;
 import com.jjop2.s4posebox.user.dto.SignupRequest;

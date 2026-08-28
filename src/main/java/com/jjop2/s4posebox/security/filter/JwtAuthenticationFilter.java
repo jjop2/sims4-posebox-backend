@@ -48,10 +48,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 		
-		String loginId = jwtService.getLoginId(token);
+		Long id = jwtService.getId(token);
 		
 		CustomUserDetails principal =
-			(CustomUserDetails) customUserDetailsService.loadUserByUsername(loginId);
+			(CustomUserDetails) customUserDetailsService.loadUserById(id);
 		
 		Authentication authentication =
 			new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());

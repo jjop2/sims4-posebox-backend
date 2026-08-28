@@ -16,7 +16,6 @@ public enum ErrorCode {
 	VALIDATION_ERROR(HttpStatus.BAD_REQUEST),
 
 	// User
-    USER_DUPLICATE_LOGIN_ID(HttpStatus.CONFLICT),
     USER_DUPLICATE_EMAIL(HttpStatus.CONFLICT),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND),
 	

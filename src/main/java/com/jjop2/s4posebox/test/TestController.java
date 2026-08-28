@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jjop2.s4posebox.security.details.CustomUserDetails;
+import com.jjop2.s4posebox.user.dto.SignupRequest;
 
 @RestController
 @RequestMapping("/test")
@@ -28,5 +31,14 @@ public class TestController {
 	public String beans() {
 //	    System.out.println(applicationContext.getBeansOfType(JsonMapper.class));
 	    return "ok";
+	}
+	
+	@PostMapping("/signup")
+	public String signup(@RequestBody SignupRequest request) {
+		System.out.println("=== ===");
+		System.out.println("회원가입 요청: " + request.getEmail());
+		System.out.println("=== ===");
+		
+		return "ok";
 	}
 }

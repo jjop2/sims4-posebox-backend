@@ -14,5 +14,4 @@ public interface OauthAccountRepository extends JpaRepository<OauthAccount, Long
 	
 	Optional<OauthAccount> findByProviderAndProviderId(OAuthProvider provider, String providerId);
 	
-	boolean existsByUser(User user);
 }

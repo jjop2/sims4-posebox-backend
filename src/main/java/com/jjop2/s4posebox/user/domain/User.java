@@ -63,8 +63,8 @@ public class User {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private LocalAccount localAccount;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-	private List<OauthAccount> oauthAccounts = new ArrayList<>();
+	@OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	private OauthAccount oauthAccount;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<RefreshToken> refreshTokens = new ArrayList<>();

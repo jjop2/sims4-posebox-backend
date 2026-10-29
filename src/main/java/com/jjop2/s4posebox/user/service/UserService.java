@@ -67,7 +67,7 @@ public class UserService {
 		if (localAccountRepository.existsById(user.getId())) {
 	        return AccountType.LOCAL;
 	    }
-	    if (oauthAccountRepository.existsByUser(user)) {
+	    if (oauthAccountRepository.existsById(user.getId())) {
 	        return AccountType.OAUTH;
 	    }
 	    throw new UserException(

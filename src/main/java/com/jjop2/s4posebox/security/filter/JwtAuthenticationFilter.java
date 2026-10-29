@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.jjop2.s4posebox.common.exception.UserException;
 import com.jjop2.s4posebox.security.details.CustomUserDetails;
 import com.jjop2.s4posebox.security.details.CustomUserDetailsService;
 import com.jjop2.s4posebox.security.jwt.JwtService;
@@ -50,8 +51,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		
 		Long id = jwtService.getId(token);
 		
-		CustomUserDetails principal =
-			(CustomUserDetails) customUserDetailsService.loadUserById(id);
+		CustomUserDetails principal;
+		try {
+			principal = (CustomUserDetails) customUserDetailsService.loadUserById(id);			
+		} catch (UserException e ) {
+			// Access token은 유효하지만 DB 조회가 되지 않는 경우 인증을 시도하지 않고 다음 필터로 전달
+			filterChain.doFilter(request, response);
+			return;
+		}
 		
 		Authentication authentication =
 			new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());

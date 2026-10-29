@@ -43,6 +43,7 @@ public class SecurityConfig {
 		http.authorizeHttpRequests((authorize) ->
 			authorize.requestMatchers(
 					"/",
+					"/error",
 					ApiPaths.USER_SIGNUP_FULL,
 					ApiPaths.AUTH_LOGIN_FULL,
 					ApiPaths.AUTH_REFRESH_FULL,

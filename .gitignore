@@ -17,28 +17,11 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-### VS Code ###
-.vscode/
-
-
 # Local configuration
 src/main/resources/application.properties
 
 # Environment variables
 .env
+
+# Test Folder
+src/main/java/com/jjop2/s4posebox/test/

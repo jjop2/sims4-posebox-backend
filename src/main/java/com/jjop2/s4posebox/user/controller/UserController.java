@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jjop2.s4posebox.user.dto.LoginRequest;
-import com.jjop2.s4posebox.user.dto.LoginResponse;
+import com.jjop2.s4posebox.common.ApiPaths;
 import com.jjop2.s4posebox.user.dto.SignupRequest;
 import com.jjop2.s4posebox.user.service.UserService;
 
@@ -17,12 +16,12 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping(ApiPaths.USER)
 public class UserController {
 	
 	private final UserService userService;
 	
-	@PostMapping("/signup")
+	@PostMapping(ApiPaths.USER_SIGNUP)
 	public ResponseEntity<Void> signup(@Valid @RequestBody SignupRequest request) {
 		
 		userService.signup(request);
@@ -30,14 +29,6 @@ public class UserController {
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
 				.build();
-	}
-	
-	@PostMapping("/login")
-	public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-		
-		LoginResponse response = userService.login(request);
-		
-		return ResponseEntity.ok(response);
 	}
 
 }

@@ -7,6 +7,8 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.jjop2.s4posebox.auth.domain.RefreshToken;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -63,6 +65,9 @@ public class User {
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<OauthAccount> oauthAccounts = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	private List<RefreshToken> refreshTokens = new ArrayList<>();
 
 	@Builder
 	public User(

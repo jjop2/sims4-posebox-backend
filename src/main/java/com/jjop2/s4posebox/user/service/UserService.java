@@ -1,25 +1,18 @@
 package com.jjop2.s4posebox.user.service;
 
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jjop2.s4posebox.common.code.ErrorCode;
 import com.jjop2.s4posebox.common.exception.UserException;
-import com.jjop2.s4posebox.security.details.CustomUserDetails;
-import com.jjop2.s4posebox.security.jwt.JwtService;
 import com.jjop2.s4posebox.user.domain.AccountType;
 import com.jjop2.s4posebox.user.domain.LocalAccount;
 import com.jjop2.s4posebox.user.domain.Role;
 import com.jjop2.s4posebox.user.domain.User;
-import com.jjop2.s4posebox.user.dto.LoginRequest;
-import com.jjop2.s4posebox.user.dto.LoginResponse;
 import com.jjop2.s4posebox.user.dto.SignupRequest;
 import com.jjop2.s4posebox.user.repository.LocalAccountRepository;
+import com.jjop2.s4posebox.user.repository.OauthAccountRepository;
 import com.jjop2.s4posebox.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -33,9 +26,8 @@ public class UserService {
 	
 	private final UserRepository userRepository;
 	private final LocalAccountRepository localAccountRepository;
+	private final OauthAccountRepository oauthAccountRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final JwtService jwtService;
-	private final AuthenticationManager authenticationManager;
 	
 	/**
 	 * 회원가입
@@ -71,50 +63,16 @@ public class UserService {
 		localAccountRepository.save(localAccount);
 	}
 	
-	/*
-	 * 로그인
-	 * 
-	 * - 사용자 인증
-	 * - JWT Access Token 발급
-	 * - 로그인 응답 반환
-	 */
-	@Transactional
-	public LoginResponse login(LoginRequest request) {
-		
-		Authentication authentication;
-		
-		String normalizedEmail = request.getEmail().trim().toLowerCase();
-		
-		try {
-			authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(
-					normalizedEmail,
-					request.getPassword()
-				)
-			);
-		} catch (BadCredentialsException e) {
-			throw new UserException(
-				ErrorCode.INVALID_CREDENTIALS,
-				"Invalid login ID or password."
-			);
-		}
-		
-		CustomUserDetails principal =
-			(CustomUserDetails) authentication.getPrincipal();
-		
-		String jwt = jwtService.createToken(
-			principal.getId(),
-			principal.getRole(),
-			AccountType.LOCAL
-		);
-		
-		User user = userRepository.findById(principal.getId())
-			.orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND, "User not found."));
-		
-		user.updateLastLoginAt();
-		
-		// TODO: Refresh Token 발급 및 저장
-		return new LoginResponse(jwt);
-	};
-	
+	public AccountType resolveAccountType(User user) {
+		if (localAccountRepository.existsById(user.getId())) {
+	        return AccountType.LOCAL;
+	    }
+	    if (oauthAccountRepository.existsByUser(user)) {
+	        return AccountType.OAUTH;
+	    }
+	    throw new UserException(
+	    	ErrorCode.USER_NOT_FOUND,
+	    	"Account type could not be resolved."
+	    );
+	}
 }

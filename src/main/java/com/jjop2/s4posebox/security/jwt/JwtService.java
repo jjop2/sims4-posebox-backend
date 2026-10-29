@@ -16,8 +16,7 @@ import io.jsonwebtoken.Jwts;
 public class JwtService {
 	
 	// 토큰 만료시간
-	// TODO: 만료시간(현재 24시간) 변경
-	private static final long EXPIRATION_TIME = 24 * 60 * 60 * 1000L;
+	private static final long EXPIRATION_TIME = JwtConstants.ACCESS_TOKEN_EXPIRATION_TIME_MILLIS;
 	
 	// 토큰 타입
 	public static final String PREFIX = JwtConstants.TOKEN_PREFIX;

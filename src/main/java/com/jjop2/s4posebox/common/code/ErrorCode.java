@@ -22,7 +22,8 @@ public enum ErrorCode {
     // Authentication
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED),
     AUTHENTICATION_REQUIRED(HttpStatus.UNAUTHORIZED),
-    INVALID_TOKEN(HttpStatus.UNAUTHORIZED),
+    REFRESH_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED),
+    REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED),
     
     // Authorization
     ACCESS_DENIED(HttpStatus.FORBIDDEN);

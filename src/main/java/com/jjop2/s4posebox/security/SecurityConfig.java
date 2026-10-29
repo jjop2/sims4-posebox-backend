@@ -16,6 +16,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.jjop2.s4posebox.common.ApiPaths;
 import com.jjop2.s4posebox.security.filter.JwtAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
@@ -42,11 +43,13 @@ public class SecurityConfig {
 		http.authorizeHttpRequests((authorize) ->
 			authorize.requestMatchers(
 					"/",
-					"/user/signup",
-					"/user/login",
+					ApiPaths.USER_SIGNUP_FULL,
+					ApiPaths.AUTH_LOGIN_FULL,
+					ApiPaths.AUTH_REFRESH_FULL,
+					ApiPaths.AUTH_LOGOUT_FULL,
 					
 					// TODO: /test 삭제
-					"/test/*"
+					"/test/test"
 				)
 				.permitAll()
 				.anyRequest()
@@ -72,6 +75,7 @@ public class SecurityConfig {
 		config.setAllowedOrigins(List.of("http://localhost:5173"));
 		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
 		config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+		config.setAllowCredentials(true);
 		
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);

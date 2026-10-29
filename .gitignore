@@ -25,3 +25,6 @@ src/main/resources/application.properties
 
 # Test Folder
 src/main/java/com/jjop2/s4posebox/test/
+
+# Claude Code
+.claude

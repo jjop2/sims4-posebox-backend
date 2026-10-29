@@ -56,7 +56,7 @@ public class UserService {
 		
 		LocalAccount localAccount = LocalAccount.builder()
 					.user(user)
-					.email(request.getEmail())
+					.email(normalizedEmail)
 					.password(encodedPassword)
 					.build();
 		

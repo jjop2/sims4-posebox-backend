@@ -47,10 +47,7 @@ public class SecurityConfig {
 					ApiPaths.USER_SIGNUP_FULL,
 					ApiPaths.AUTH_LOGIN_FULL,
 					ApiPaths.AUTH_REFRESH_FULL,
-					ApiPaths.AUTH_LOGOUT_FULL,
-					
-					// TODO: /test 삭제
-					"/test/test"
+					ApiPaths.AUTH_LOGOUT_FULL
 				)
 				.permitAll()
 				.anyRequest()

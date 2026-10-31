@@ -102,7 +102,21 @@ public class AuthService {
 		
 		User user = refreshToken.getUser();
 		
-		AccountType accountType = userService.resolveAccountType(user);	
+		AccountType accountType = userService.resolveAccountType(user);
+		
+		String nickname = null;
+		
+		if (user.getRole() == Role.CREATOR) {
+			// TODO: creator에서 nickname 추출
+		}
+		
+		UserDto userDto = new UserDto(
+			user.getId(),
+			user.getRole(),
+			AccountType.LOCAL,
+			nickname
+		);
+		
 		
 		String accessToken = jwtService.createToken(
 			user.getId(),
@@ -110,7 +124,7 @@ public class AuthService {
 			accountType
 		);
 		
-		return new RefreshResult(new RefreshResponse(accessToken), refreshToken.getToken());		
+		return new RefreshResult(new RefreshResponse(accessToken, userDto), refreshToken.getToken());		
 	};
 	
 	@Transactional

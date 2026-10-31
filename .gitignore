@@ -19,12 +19,25 @@ bin/
 
 # Local configuration
 src/main/resources/application.properties
+src/main/resources/application-*.properties
 
 # Environment variables
 .env
+.env.*
 
-# Test Folder
+# Keys and certificates
+*.pem
+*.key
+*.p12
+*.jks
+
+# Dev-only test endpoints
 src/main/java/**/test/
 
 # Claude Code
 .claude
+
+# OS / logs
+.DS_Store
+Thumbs.db
+*.log
